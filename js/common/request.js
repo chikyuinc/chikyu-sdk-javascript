@@ -18,7 +18,7 @@ Chikyu.prototype.invoke = function(apiClass, apiPath, apiData, headers) {
     cache: false,
     beforeSend: function(xhr) {
       headers.forEach(function(header) {
-        if (header[0] == 'Host') {
+        if (header[0] == 'host') {
           return;
         }
         xhr.setRequestHeader(header[0], header[1]);
@@ -38,7 +38,11 @@ Chikyu.prototype.invoke = function(apiClass, apiPath, apiData, headers) {
   return d.promise();
 };
 
-Chikyu.prototype.buildUrl = function(apiClass, apiPath, withHost=true) {
+Chikyu.prototype.buildUrl = function(apiClass, apiPath, withHost) {
+  if (withHost !== false) {
+    withHost = true;
+  }
+
   if (apiPath.indexOf('/') == 0) {
     apiPath = apiPath.substr(1);
   }

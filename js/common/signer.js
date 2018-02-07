@@ -103,7 +103,11 @@ var getNow = function(c) {
   return new Date().getTime() + c.params.offset;
 };
 
-var getCurrentTime = function(now, withTime=true) {
+var getCurrentTime = function(now, withTime) {
+  if (withTime !== false) {
+    withTime = true;
+  }
+
   var d = new Date();
   d.setTime(now);
 
@@ -127,7 +131,7 @@ var getSha256 = function(text) {
   return sha256.update(text).hex();
 };
 
-var getHmacSha256 = function(key, text, isRaw=false) {
+var getHmacSha256 = function(key, text, isRaw) {
   var hmac = sha256.hmac.update(key, text);
   if (isRaw) {
     return hmac.array();

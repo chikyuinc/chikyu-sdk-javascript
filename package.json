@@ -8,5 +8,11 @@
     "start": "live-server ./"
   },
   "author": "Chikyu Inc.",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "grunt": "^1.0.1",
+    "grunt-contrib-clean": "^1.1.0",
+    "grunt-contrib-concat": "^1.0.1",
+    "grunt-contrib-uglify": "^3.3.0"
+  }
 }
