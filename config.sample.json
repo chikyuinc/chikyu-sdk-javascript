@@ -1,0 +1,12 @@
+{
+  "login": {
+    "token_name": "",
+    "email": "",
+    "password": ""
+  },
+  "token": {
+    "token_name": "",
+    "login_token": "",
+    "login_secret_token": ""
+  }
+}

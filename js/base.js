@@ -1,0 +1,1 @@
+Chikyu = function() {};
