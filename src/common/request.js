@@ -47,10 +47,10 @@ Chikyu.prototype.buildUrl = function(apiClass, apiPath, withHost) {
     apiPath = apiPath.substr(1);
   }
 
-  var path = '/' + this.config.ENV_NAME + '/api/v2/' + apiClass + '/' + apiPath;
+  var path = '/' + this.config.envName() + '/api/v2/' + apiClass + '/' + apiPath;
 
   if (withHost) {
-    return this.config.PROTOCOL + '://' + this.config.HOST + path;
+    return this.config.protocol() + '://' + this.config.host() + path;
   } else {
     return path;
   }

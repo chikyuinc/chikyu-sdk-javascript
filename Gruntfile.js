@@ -7,35 +7,45 @@ module.exports = function(g){
         separator: ';',
       },
       dist: {
-        src: ["./js/base.js",
-              "./js/common/init.js",
-              "./js/common/const.js",
-              "./js/common/request.js",
-              "./js/common/aws.js",
-              "./js/common/signer.js",
-              "./js/invoke/open.js",
-              "./js/invoke/public.js",
-              "./js/invoke/secure.js",
-              "./js/resource/session.js",
-              "./js/resource/token.js"],
-        dest: 'dist/chikyu-sdk.js',
+        src: ["./src/base.js",
+              "./src/common/config.js",
+              "./src/common/request.js",
+              "./src/common/aws.js",
+              "./src/common/signer.js",
+              "./src/invoke/open.js",
+              "./src/invoke/public.js",
+              "./src/invoke/secure.js",
+              "./src/resource/session.js",
+              "./src/resource/token.js"],
+        dest: './dist/js/chikyu-sdk.js',
       },
     },
     uglify: {
       chikyu_sdk_js: {
         files: {
-          'dist/chikyu-sdk.min.js': ['dist/chikyu-sdk.js']
+          'dist/js/chikyu-sdk.min.js': ['dist/js/chikyu-sdk.js']
         }
       }
     },
+    watch: {
+      scripts: {
+        files: ['src/**/*.js'],
+        tasks: ['concat'],
+        options: {
+          spawn: false,
+        },
+      },
+    },
     clean: {
-      release: ['dist']
+      release: ['dist/js']
     }
   });
 
   g.loadNpmTasks('grunt-contrib-uglify');
   g.loadNpmTasks('grunt-contrib-concat');
   g.loadNpmTasks('grunt-contrib-clean');
+  g.loadNpmTasks('grunt-contrib-watch');
+
   g.registerTask('build', ['clean', 'concat', 'uglify']);
   g.registerTask('default', ['build']);
 }

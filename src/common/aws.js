@@ -1,9 +1,9 @@
 Chikyu.prototype.getCredentials = function(cognitoToken) {
-  var sts = new AWS.STS({region: 'ap-northeast-1'});
+  var sts = new AWS.STS({region: this.config.awsRegion()});
   var d = $.Deferred();
   sts.assumeRoleWithWebIdentity({
-    RoleArn: this.config.AWS_ROLE_ARN,
-    RoleSessionName: this.config.AWS_API_GW_SERVICE_NAME,
+    RoleArn: this.config.awsRoleArn(),
+    RoleSessionName: this.config.awsApiGwServiceName(),
     WebIdentityToken: cognitoToken
   }, function(err, data) {
     if (err) {

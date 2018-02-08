@@ -10,6 +10,12 @@ Chikyu.prototype.login = function(tokenName, loginToken, secretToken) {
     that.session.sessionId = data.session_id;
     that.session.identityId = data.cognito_identity_id;
     that.session.apiKey = data.api_key;
+
+    //API呼び出しのレイテンスはあるが、だいたい補正できればOK。
+    var localTime = new Date().getTime();
+    var serverTime = data.server_time * 1000;
+    that.session.offset = serverTime - localTime;
+
     var cognitoToken = data.cognito_token;
     that.getCredentials(data.cognito_token).done(function(data) {
       that.session.credentials = data.Credentials;
@@ -24,9 +30,11 @@ Chikyu.prototype.login = function(tokenName, loginToken, secretToken) {
 };
 
 Chikyu.prototype.changeOrgan = function(targetOrganId) {
-
+  return this.invokeSecure('/session/organ/change', {
+    'target_organ_id': targetOrganId
+  })
 };
 
 Chikyu.prototype.logout = function() {
-
+  return this.invokeSecure('/session/logout', {});
 };

@@ -11,7 +11,7 @@ Chikyu.prototype.getSignedHeaders = function(path, payload) {
 
   var headers = [];
   headers.push(['content-type', 'application/json']);
-  headers.push(['host', this.config.HOST]);
+  headers.push(['host', this.config.host()]);
   headers.push(['x-amz-date', currentTime]);
   headers.push(['x-amz-security-token', this.session.credentials.SessionToken]);
   headers.push(['x-api-key', this.session.apiKey]);
@@ -67,8 +67,8 @@ var getCanonicalUrl = function(path, payload, headerNames, headers) {
 
 var getServiceDescription = function(currentDate, c) {
   return currentDate + "/" +
-          c.config.AWS_REGION + "/" +
-          c.config.AWS_API_GW_SERVICE_NAME + "/" +
+          c.config.awsRegion() + "/" +
+          c.config.awsApiGwServiceName() + "/" +
           AWS4_REQUEST;
 };
 
@@ -87,8 +87,8 @@ var getSignature = function(textToSign, currentDate, c) {
 var getSignatureKey = function(key, currentDate, c) {
   var secret1 = AWS4 + key;
   var secret2 = getHmacSha256(secret1, currentDate, true);
-  var secret3 = getHmacSha256(secret2, c.config.AWS_REGION, true);
-  var secret4 = getHmacSha256(secret3, c.config.AWS_API_GW_SERVICE_NAME, true);
+  var secret3 = getHmacSha256(secret2, c.config.awsRegion(), true);
+  var secret4 = getHmacSha256(secret3, c.config.awsApiGwServiceName(), true);
   return getHmacSha256(secret4, AWS4_REQUEST, true);
 }
 
@@ -100,7 +100,7 @@ var createAuthorizationHeader = function(headerNames, serviceDescription, signat
 }
 
 var getNow = function(c) {
-  return new Date().getTime() + c.params.offset;
+  return new Date().getTime() + c.session.offset;
 };
 
 var getCurrentTime = function(now, withTime) {

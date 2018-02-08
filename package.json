@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "live-server ./"
+    "start": "./node_modules/.bin/live-server ./dist"
   },
   "author": "Chikyu Inc.",
   "license": "ISC",
@@ -13,6 +13,8 @@
     "grunt": "^1.0.1",
     "grunt-contrib-clean": "^1.1.0",
     "grunt-contrib-concat": "^1.0.1",
-    "grunt-contrib-uglify": "^3.3.0"
+    "grunt-contrib-uglify": "^3.3.0",
+    "grunt-contrib-watch": "^1.0.0",
+    "live-server": "^1.2.0"
   }
 }
