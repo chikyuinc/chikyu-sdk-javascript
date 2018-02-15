@@ -3,7 +3,7 @@ var AWS4 = "AWS4";
 var AWS4_HMAC_SHA256 = "AWS4-HMAC-SHA256";
 var AWS4_REQUEST = "aws4_request";
 
-Chikyu.prototype.getSignedHeaders = function(path, payload) {
+Chikyu.Sdk.prototype.getSignedHeaders = function(path, payload) {
 
   var now = getNow(this);
   var currentTime = getCurrentTime(now, true);

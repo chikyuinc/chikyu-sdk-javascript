@@ -1,4 +1,4 @@
-Chikyu.prototype.getCredentials = function(cognitoToken) {
+Chikyu.Sdk.prototype.getCredentials = function(cognitoToken) {
   var sts = new AWS.STS({region: this.config.awsRegion()});
   var d = $.Deferred();
   sts.assumeRoleWithWebIdentity({

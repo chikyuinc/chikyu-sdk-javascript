@@ -1,2 +1,5 @@
 'use strict';
-window.Chikyu = function() {};
+if (!('Chikyu' in window)) {
+  window.Chikyu = function() {};
+}
+Chikyu.Sdk = function() {};

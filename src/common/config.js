@@ -1,4 +1,4 @@
-Chikyu.prototype.config = {
+Chikyu.Sdk.prototype.config = {
   awsRegion: function() {
     return 'ap-northeast-1';
   },

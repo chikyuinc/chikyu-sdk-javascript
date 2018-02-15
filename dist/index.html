@@ -10,7 +10,7 @@
 
     <script type="text/javascript">
     $(function() {
-      var chikyu = new Chikyu();
+      var chikyu = new Chikyu.Sdk();
 
       var config;
       $.get("./config." + chikyu.config.mode() + ".json").then(function(data) {
@@ -25,6 +25,8 @@
         })
       }).then(function(data) {
         $("#hoge").text(data.total_count);
+      }).fail(function(err) {
+        alert(JSON.stringify(err));
       });
     });
     </script>

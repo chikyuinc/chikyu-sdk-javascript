@@ -1,4 +1,4 @@
-Chikyu.prototype.invoke = function(apiClass, apiPath, apiData, headers) {
+Chikyu.Sdk.prototype.invoke = function(apiClass, apiPath, apiData, headers) {
   if (!headers) {
     headers = [['Content-Type', 'application/json']]
   }
@@ -38,7 +38,7 @@ Chikyu.prototype.invoke = function(apiClass, apiPath, apiData, headers) {
   return d.promise();
 };
 
-Chikyu.prototype.buildUrl = function(apiClass, apiPath, withHost) {
+Chikyu.Sdk.prototype.buildUrl = function(apiClass, apiPath, withHost) {
   if (withHost !== false) {
     withHost = true;
   }

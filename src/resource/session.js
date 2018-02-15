@@ -1,11 +1,13 @@
-Chikyu.prototype.login = function(tokenName, loginToken, secretToken) {
+Chikyu.Sdk.prototype.login = function(tokenName, loginToken, secretToken, duration) {
   var d = $.Deferred();
   this.session = {};
   var that = this;
   this.invokeOpen('/session/login', {
     token_name: tokenName,
     login_token: loginToken,
-    login_secret_token: secretToken
+    login_secret_token: secretToken,
+
+    duration: duration
   }).done(function(data) {
     that.session.sessionId = data.session_id;
     that.session.identityId = data.cognito_identity_id;
@@ -29,12 +31,12 @@ Chikyu.prototype.login = function(tokenName, loginToken, secretToken) {
   return d.promise();
 };
 
-Chikyu.prototype.changeOrgan = function(targetOrganId) {
+Chikyu.Sdk.prototype.changeOrgan = function(targetOrganId) {
   return this.invokeSecure('/session/organ/change', {
     'target_organ_id': targetOrganId
   })
 };
 
-Chikyu.prototype.logout = function() {
+Chikyu.Sdk.prototype.logout = function() {
   return this.invokeSecure('/session/logout', {});
 };

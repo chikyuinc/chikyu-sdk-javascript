@@ -1,4 +1,4 @@
-Chikyu.prototype.invokeSecure = function(apiPath, data) {
+Chikyu.Sdk.prototype.invokeSecure = function(apiPath, data) {
   var path = this.buildUrl("secure", apiPath, false);
   var params = {
     'session_id': this.session.sessionId,
