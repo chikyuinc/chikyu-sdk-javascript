@@ -17,13 +17,13 @@ module.exports = function(g){
               "./src/invoke/secure.js",
               "./src/resource/session.js",
               "./src/resource/token.js"],
-        dest: './dist/js/chikyu-sdk.js',
+        dest: './target/js/chikyu-sdk.js',
       },
     },
     uglify: {
       chikyu_sdk_js: {
         files: {
-          'dist/js/chikyu-sdk.min.js': ['dist/js/chikyu-sdk.js']
+          'target/js/chikyu-sdk.min.js': ['target/js/chikyu-sdk.js']
         }
       }
     },
@@ -37,7 +37,7 @@ module.exports = function(g){
       },
     },
     clean: {
-      release: ['dist/js']
+      release: ['target/js']
     }
   });
 
