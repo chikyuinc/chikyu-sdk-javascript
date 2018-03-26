@@ -11,20 +11,55 @@
     <script type="text/javascript">
     $(function() {
       var chikyu = new Chikyu.Sdk();
+      chikyu.config.setMode('local');
 
       var config;
       $.get("./config." + chikyu.config.mode() + ".json").then(function(data) {
         config = data;
-        return chikyu.login(config['token']['token_name'],
-                            config['token']['login_token'],
-                            config['token']['login_secret_token']);
-      }).then(function() {
-        return chikyu.invokeSecure('/entity/prospects/list', {
-          'items_per_page': 10,
-          'page_index': 0
-        })
-      }).then(function(data) {
-        $("#hoge").text(data.total_count);
+        $('#token_name').val(config['login']['token_name']);
+        $('#email').val(config['login']['email']);
+        $('#password').val(config['login']['password']);
+
+        $('#btn_token_test').click(function() {
+          chikyu.createToken(
+            $('#token_name').val(), $('#email').val(), $('#password').val()).then(function(data) {
+              $('#login_token_1').text(data['login_token']);
+              $('#login_token_2').text(data['login_secret_token']);
+          }).fail(function(err) {
+              alert(err.message);
+          });
+        });
+
+        $('#btn_login_test').click(function() {
+          $("#item_total_count").text('');
+          chikyu.login(config['token']['token_name'],
+                       config['token']['login_token'],
+                       config['token']['login_secret_token'])
+                  .then(function() {
+                    alert('ログインしました');
+                  }).fail(function(err) {
+                    alert(JSON.stringify(err));
+                  });
+        });
+
+        $('#btn_count_prospects').click(function() {
+          chikyu.invokeSecure('/entity/prospects/list', {
+              'items_per_page': 10,
+              'page_index': 0
+          }).then(function(data) {
+            $("#item_total_count").text(data.total_count);
+          }).fail(function(err) {
+            alert(JSON.stringify(err));
+          });
+        });
+
+        $('#btn_session_to_map').click(function() {
+          $('#session_item').text(JSON.stringify(chikyu.sesssionToMap()));
+        });
+
+        $('#btn_session_from_map').click(function() {
+          chikyu.mapToSession(JSON.parse($('#session_item').text()));
+        });
       }).fail(function(err) {
         alert(JSON.stringify(err));
       });
@@ -32,6 +67,21 @@
     </script>
   </head>
   <body>
-    <div id="hoge"></div>
+    <div id="token">
+        <input type="text" id="token_name"></br>
+        <input type="text" id="email"><br/>
+        <input type="password" id="password"><br/>
+        <div id="login_token_1"></div>
+        <div id="login_token_2"></div>
+        <button id="btn_token_test">token_test</button>
+    </div>
+    <div id="login">
+      <button id="btn_login_test">login_test</button><br/>
+      <button id="btn_count_prospects">count_test</button><br/>
+      <div id="item_total_count"></div>
+      <button id="btn_session_to_map">to_map</button><br/>
+      <div id="session_item"></div>
+      <button id="btn_session_from_map">from_map</button><br/>
+    </div>
   </body>
 </html>

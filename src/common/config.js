@@ -9,23 +9,48 @@ Chikyu.Sdk.prototype.config = {
     return 'execute-api';
   },
   host: function() {
-    if (this.mode() == 'local') {
-      return 'localhost:9090';
-    } else if (this.mode() == 'dev') {
-      return 'gateway.chikyu.mobi';
+    var hosts = {
+      'local': 'localhost:9090',
+      'docker': 'dev-python:9090',
+      'devdc': 'gateway.chikyu.mobi',
+      'dev01': 'gateway.chikyu.mobi',
+      'dev02': 'gateway.chikyu.mobi',
+      'hotfix01': 'gateway.chikyu.mobi',
+      'prod': 'api.chikyu.net'
     }
+    return hosts[this.mode()];
   },
   protocol: function() {
-    if (this.mode() == 'local') {
-      return 'http';
-    } else if (this.mode() == 'dev') {
-      return 'https';
+    var protocols = {
+      'local': 'http',
+      'docker': 'http',
+      'devdc': 'https',
+      'dev01': 'https',
+      'dev02': 'https',
+      'hotfix01': 'https',
+      'prod': 'https'
     }
+    return protocols[this.mode()];
   },
   envName: function() {
-    return 'dev';
+    var envNames = {
+      'local': '',
+      'docker': '',
+      'devdc': 'dev',
+      'dev01': 'dev01',
+      'dev02': 'dev02',
+      'hotfix01': 'hotfix01',
+      'prod': ''
+    }
+    return envNames[this.mode()];
   },
   mode: function() {
-    return 'dev';
+    if (!this._mode) {
+      this._mode = 'prod';
+    }
+    return this._mode;
+  },
+  setMode: function(mode) {
+    this._mode = mode;
   }
 }

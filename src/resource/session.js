@@ -12,6 +12,8 @@ Chikyu.Sdk.prototype.login = function(tokenName, loginToken, secretToken, durati
     that.session.sessionId = data.session_id;
     that.session.identityId = data.cognito_identity_id;
     that.session.apiKey = data.api_key;
+    that.session.user = {};
+    that.session.user.userId = data.user.user_id;
 
     //API呼び出しのレイテンスはあるが、だいたい補正できればOK。
     var localTime = new Date().getTime();
@@ -29,6 +31,40 @@ Chikyu.Sdk.prototype.login = function(tokenName, loginToken, secretToken, durati
     d.reject(err);
   });
   return d.promise();
+};
+
+Chikyu.Sdk.prototype.hasSession = function() {
+  return this.session &&
+          this.session.sessionId &&
+          this.session.identityId &&
+          this.session.credentials
+};
+
+Chikyu.Sdk.prototype.sesssionToMap = function() {
+  if (!this.hasSession()) {
+    return null;
+  }
+
+  return {
+    'sessionId': this.session.sessionId,
+    'identityId': this.session.identityId,
+    'apiKey': this.session.apiKey,
+    'offset': this.session.offset,
+    'credentials': this.session.credentials,
+    'user': {
+      'userId': this.session.user.userId
+    }
+  }
+};
+
+Chikyu.Sdk.prototype.mapToSession = function(sessionMap) {
+  this.session = {};
+  this.session.sessionId = sessionMap['sessionId'];
+  this.session.user = sessionMap['user'];
+  this.session.identityId = sessionMap['identityId'];
+  this.session.apiKey = sessionMap['apiKey'];
+  this.session.offset = sessionMap['offset'];
+  this.session.credentials = sessionMap['credentials'];
 };
 
 Chikyu.Sdk.prototype.changeOrgan = function(targetOrganId) {

@@ -47,7 +47,12 @@ Chikyu.Sdk.prototype.buildUrl = function(apiClass, apiPath, withHost) {
     apiPath = apiPath.substr(1);
   }
 
-  var path = '/' + this.config.envName() + '/api/v2/' + apiClass + '/' + apiPath;
+  var envName = this.config.envName();
+  if (envName) {
+    var path = '/' + this.config.envName() + '/api/v2/' + apiClass + '/' + apiPath;
+  } else {
+    var path = '/api/v2/' + apiClass + '/' + apiPath;
+  }
 
   if (withHost) {
     return this.config.protocol() + '://' + this.config.host() + path;
