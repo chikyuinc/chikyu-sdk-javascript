@@ -113,7 +113,7 @@ if (!chikyu.hasSession()) {
     alert(JSON.stringify(session));
     
     //セッション情報をテキストに変換する
-    var text = chikyu.sesssionToJson();
+    var text = chikyu.sessionToJson();
     
     //セッション情報をテキストから復元する
     session = chikyu.sessionFromJson(text);

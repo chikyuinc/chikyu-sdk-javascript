@@ -67,6 +67,18 @@ Chikyu.Sdk.prototype.mapToSession = function(sessionMap) {
   this.session.credentials = sessionMap['credentials'];
 };
 
+Chikyu.Sdk.prototype.sessionToJson = function() {
+  var item = this.sesssionToMap();
+  if (item) {
+    return JSON.stringify();
+  }
+};
+
+Chikyu.Sdk.prototype.sessionFromJson = function(json) {
+  var item = JSON.stringify(json);
+  this.mapToSession(item);
+};
+
 Chikyu.Sdk.prototype.changeOrgan = function(targetOrganId) {
   return this.invokeSecure('/session/organ/change', {
     'target_organ_id': targetOrganId
