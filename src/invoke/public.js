@@ -1,4 +1,7 @@
 Chikyu.Sdk.prototype.setApiKeys = function(apiKey, authKey) {
+  if (!this.params) {
+    this.params = {};
+  }
   this.params.apiKey = apiKey;
   this.params.authKey = authKey;
 };
