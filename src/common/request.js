@@ -31,8 +31,8 @@ Chikyu.Sdk.prototype.invoke = function(apiClass, apiPath, apiData, headers) {
       return;
     }
     d.resolve(data.data);
-  }).fail(function() {
-    d.reject();
+  }).fail(function(err) {
+    d.reject(err);
   })
 
   return d.promise();

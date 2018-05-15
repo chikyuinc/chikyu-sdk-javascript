@@ -34,13 +34,11 @@ Chikyu.Sdk.prototype.login = function(tokenName, loginToken, secretToken, durati
 };
 
 Chikyu.Sdk.prototype.hasSession = function() {
-  return this.session &&
-          this.session.sessionId &&
-          this.session.identityId &&
-          this.session.credentials
+  return this.session != null && this.session.sessionId &&
+          this.session.identityId && this.session.credentials != null
 };
 
-Chikyu.Sdk.prototype.sesssionToMap = function() {
+Chikyu.Sdk.prototype.sessionToMap = function() {
   if (!this.hasSession()) {
     return null;
   }
@@ -68,21 +66,30 @@ Chikyu.Sdk.prototype.mapToSession = function(sessionMap) {
 };
 
 Chikyu.Sdk.prototype.sessionToJson = function() {
-  var item = this.sesssionToMap();
+  var item = this.sessionToMap();
   if (item) {
-    return JSON.stringify();
+    return JSON.stringify(item);
   }
 };
 
 Chikyu.Sdk.prototype.sessionFromJson = function(json) {
-  var item = JSON.stringify(json);
+  var item = JSON.parse(json);
   this.mapToSession(item);
 };
 
 Chikyu.Sdk.prototype.changeOrgan = function(targetOrganId) {
-  return this.invokeSecure('/session/organ/change', {
+  var d = $.Deferred();
+  var that = this;
+  this.invokeSecure('/session/organ/change', {
     'target_organ_id': targetOrganId
-  })
+  }).then(function(data) {
+    that.session.apiKey = data['api_key']
+    that.session.user = data['user']
+    d.resolve();
+  }).fail(function(err) {
+    d.reject(err);
+  });
+  return d.promise();
 };
 
 Chikyu.Sdk.prototype.logout = function() {
