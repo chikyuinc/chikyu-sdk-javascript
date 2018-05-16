@@ -1,4 +1,4 @@
-# Chikyu
+# chikyu-sdk-javascript
 ## 概要
 **内容は全てリリース前のものであり、予告なく変更となる場合があります**
 
@@ -48,15 +48,14 @@ $(function() {
 
 ## 詳細
 ### class1(APIキーのみで呼び出し可能)
-#### APIトークンを生成する
+#### APIキーを生成する
 ```token.js
 chikyu = new Chikyu.Sdk();
 
 // 2018/05/15現在、まだ本番環境が存在しないため、接続先の指定が必要。
 chikyu.config.setMode('devdc');
 
-//後述のclass2 apiを利用し、予めトークンを生成しておく。
-//(APIキーを生成するAPIは、ログインした状態にならないと実行できない)
+//後述のclass2 apiを利用し、予めログイン用の「認証トークン」(＊ここで言う「APIキー」とは別)を生成しておく。
 chikyu.login('token_name',  'login_token',  'login_secret_token').then(function(data) {
   // 引数にキー名称(任意)と、関連付けるロールのIDを指定する。
   // 関連付けるロールは、予め作成しておく。
@@ -99,8 +98,8 @@ chikyu.invokePublic('/entity/prospects/list', {
 });
 ```
 
-### class2(APIトークンからセッションを生成)
-#### APIトークンを生成する
+### class2(認証トークンからセッションを生成)
+#### 認証トークンを生成する
 ```create_token.js
 chikyu = new Chikyu.Sdk();
 
