@@ -3,7 +3,11 @@ Chikyu.Sdk.prototype.config = {
     return 'ap-northeast-1';
   },
   awsRoleArn: function() {
-    return 'arn:aws:iam::171608821407:role/Cognito_Chikyu_Normal_Id_PoolAuth_Role';
+    if (this.mode() == 'local' || this.mode() == 'docker') {
+      return 'arn:aws:iam::527083274078:role/Cognito_ChikyuDevLocalAuth_Role';
+    } else {
+      return 'arn:aws:iam::171608821407:role/Cognito_Chikyu_Normal_Id_PoolAuth_Role';
+    }
   },
   awsApiGwServiceName: function() {
     return 'execute-api';
