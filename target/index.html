@@ -11,7 +11,7 @@
     <script type="text/javascript">
     $(function() {
       var chikyu = new Chikyu.Sdk();
-      chikyu.config.setMode('local');
+      chikyu.config.setMode('devdc');
 
       var config;
       $.get("./config." + chikyu.config.mode() + ".json").then(function(data) {

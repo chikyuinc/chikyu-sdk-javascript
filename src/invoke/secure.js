@@ -1,4 +1,4 @@
-Chikyu.Sdk.prototype.invokeSecure = function(apiPath, data) {
+Chikyu.Sdk.prototype.invokeSecure = function(apiPath, data, http) {
   if (!this.hasSession()) {
     var d = $.Deferred();
     d.reject({'has_error': true, 'message': 'セッション情報がありません'});
@@ -16,5 +16,5 @@ Chikyu.Sdk.prototype.invokeSecure = function(apiPath, data) {
   }
 
   var signedHeaders = this.getSignedHeaders(path, JSON.stringify(params));
-  return this.invoke("secure", apiPath, params, signedHeaders);
+  return this.invoke("secure", apiPath, params, signedHeaders, http);
 };
