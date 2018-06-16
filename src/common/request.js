@@ -44,11 +44,19 @@ Chikyu.Sdk.prototype.invoke = function(apiClass, apiPath, apiData, headers, http
     });
   } else {
     //AngularJSのhttpオブジェクトを想定。
+    var header_map = {};
+    headers.forEach(function(header) {
+      if (header[0] == 'host') {
+        return;
+      }
+      header_map[header[0]] = header[1];
+    });
+
     http({
       url: url,
       method: 'POST',
       data: apiData,
-      headers: headers
+      headers: header_map
     }).success(function(data) {
       onSuccess(data);
     }).error(function(err) {
