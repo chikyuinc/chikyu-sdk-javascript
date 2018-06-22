@@ -4,7 +4,8 @@ Chikyu.Sdk.prototype.getCredentials = function(cognitoToken) {
   sts.assumeRoleWithWebIdentity({
     RoleArn: this.config.awsRoleArn(),
     RoleSessionName: this.config.awsApiGwServiceName(),
-    WebIdentityToken: cognitoToken
+    WebIdentityToken: cognitoToken,
+    DurationSeconds: 43200
   }, function(err, data) {
     if (err) {
       console.log(err, err.stack);
