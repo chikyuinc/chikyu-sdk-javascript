@@ -3,6 +3,9 @@ Chikyu.Sdk.prototype.config = {
     return 'ap-northeast-1';
   },
   awsRoleArn: function() {
+    if (this.mode() == 'prod'){
+      return 'arn:aws:iam::171608821407:role/Cognito_chikyu_PROD_idpoolAuth_Role';
+    }
     if (this.mode() == 'local' || this.mode() == 'docker') {
       return 'arn:aws:iam::527083274078:role/Cognito_ChikyuDevLocalAuth_Role';
     } else {
