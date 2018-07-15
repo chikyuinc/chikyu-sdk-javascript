@@ -47,7 +47,7 @@ Chikyu.Sdk.prototype.config = {
       'dev01': 'dev01',
       'dev02': 'dev02',
       'hotfix01': 'hotfix01',
-      'prod': ''
+      'prod': 'prod'
     }
     return envNames[this.mode()];
   },
