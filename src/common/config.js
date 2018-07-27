@@ -23,7 +23,7 @@ Chikyu.Sdk.prototype.config = {
       'dev01': 'gateway.chikyu.mobi',
       'dev02': 'gateway.chikyu.mobi',
       'hotfix01': 'gateway.chikyu.mobi',
-      'prod': 'api.chikyu.net'
+      'prod': 'endpoint.chikyu.net'
     }
     return hosts[this.mode()];
   },
@@ -47,7 +47,7 @@ Chikyu.Sdk.prototype.config = {
       'dev01': 'dev01',
       'dev02': 'dev02',
       'hotfix01': 'hotfix01',
-      'prod': 'prod'
+      'prod': ''
     }
     return envNames[this.mode()];
   },
