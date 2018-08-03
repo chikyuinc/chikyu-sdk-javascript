@@ -1,7 +1,5 @@
 # chikyu-sdk-javascript
 ## 概要
-**内容は全てリリース前のものであり、予告なく変更となる場合があります**
-
 ちきゅうのWeb APIをJavaScript(jQuery)から利用するためのライブラリです。
 
 ＊NodeJSでの利用は想定しておりません。
@@ -26,8 +24,6 @@ htmlのヘッダ部に、以下のスクリプトを埋め込んで下さい。
 ```test.js
 $(function() {
   chikyu = new Chikyu.Sdk();
-  //2018/05/14現在、まだ本番環境が未構築であるため、こちらのテスト用の環境名を指定して下さい。
-  chikyu.config.setMode('devdc');
   
   //セッションの生成
   chikyu.login('tokenName', 'loginToken', 'loginSecretToken').then(function(data) {
@@ -52,9 +48,6 @@ $(function() {
 ```token.js
 chikyu = new Chikyu.Sdk();
 
-// 2018/05/15現在、まだ本番環境が存在しないため、接続先の指定が必要。
-chikyu.config.setMode('devdc');
-
 //後述のclass2 apiを利用し、予めログイン用の「認証トークン」(＊ここで言う「APIキー」とは別)を生成しておく。
 chikyu.login('token_name',  'login_token',  'login_secret_token').then(function(data) {
   // 引数にキー名称(任意)と、関連付けるロールのIDを指定する。
@@ -77,9 +70,6 @@ chikyu.login('token_name',  'login_token',  'login_secret_token').then(function(
 #### 呼び出しを実行する
 ```invoke_public.js
 chikyu = new Chikyu.Sdk();
-
-// 2018/05/15現在、まだ本番環境が存在しないため、接続先の指定が必要。
-chikyu.config.setMode('devdc');
 
 //保存しておいたAPIキーをセットする
 chikyu.setApiKeys('api_key', 'auth_key');
@@ -121,9 +111,6 @@ chikyu.createToken('token_name', 'email', 'password')
 ```create_session.js
 chikyu = new Chikyu.Sdk();
 
-// 2018/05/15現在、まだ本番環境が存在しないため、接続先の指定が必要。
-chikyu.config.setMode('devdc');
-
 //セッションが存在するかチェックする
 if (!chikyu.hasSession()) {
   //上で生成したトークン情報を保存しておき、展開する
@@ -160,9 +147,6 @@ if (!chikyu.hasSession()) {
 #### 呼び出しを実行する
 ```invoke_secure.js
 chikyu = new Chikyu.Sdk();
-
-// 2018/05/15現在、まだ本番環境が存在しないため、接続先の指定が必要。
-chikyu.config.setMode('devdc');
 
 // chikyu.loginを実行した後であれば実行可能。
 // (他言語のSDKとは異なり、引数にセッション情報は不要)
