@@ -15,10 +15,9 @@ Chikyu.Sdk.prototype.login = function(tokenName, loginToken, secretToken, durati
     that.session.user = {};
     that.session.user.userId = data.user.user_id;
 
-    //API呼び出しのレイテンスはあるが、だいたい補正できればOK。
-    var localTime = new Date().getTime();
-    var serverTime = data.server_time * 1000;
-    that.session.offset = serverTime - localTime;
+    // var localTime = new Date().getTime();
+    // var serverTime = data.server_time * 1000;
+    that.session.offset = 0; //serverTime - localTime;
 
     var cognitoToken = data.cognito_token;
     that.getCredentials(data.cognito_token).done(function(data) {
