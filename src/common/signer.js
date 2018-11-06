@@ -100,7 +100,18 @@ var createAuthorizationHeader = function(headerNames, serviceDescription, signat
 }
 
 var getNow = function(c) {
-  return new Date().getTime() + c.session.offset;
+  var o = 0;
+  try {
+    o = parseInt(c.session.offset);
+  } catch (e) {
+
+  }
+
+  if (c.session.offset) {
+    return new Date().getTime() + c.session.offset;
+  } else {
+    return new Date().getTime();
+  }
 };
 
 var getCurrentTime = function(now, withTime) {

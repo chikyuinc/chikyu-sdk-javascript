@@ -15,8 +15,8 @@ Chikyu.Sdk.prototype.invoke = function(apiClass, apiPath, apiData, headers, http
     d.resolve(data.data);
   };
 
-  var onError = function(err) {
-    d.reject(err);
+  var onError = function(data, status, headers, config) {
+    d.reject(data, status, headers, config);
   };
 
   if (!http) {
@@ -31,7 +31,7 @@ Chikyu.Sdk.prototype.invoke = function(apiClass, apiPath, apiData, headers, http
         cache: false,
         beforeSend: function(xhr) {
           headers.forEach(function(header) {
-            if (header[0] == 'host') {
+            if (header[0] === 'host') {
               return;
             }
             xhr.setRequestHeader(header[0], header[1]);
@@ -39,14 +39,14 @@ Chikyu.Sdk.prototype.invoke = function(apiClass, apiPath, apiData, headers, http
         }
     }).done(function(data) {
       onSuccess(data);
-    }).fail(function(err) {
-      onError(err);
+    }).fail(function(req, status, error) {
+      onError(req, status, error, null);
     });
   } else {
     //AngularJSのhttpオブジェクトを想定。
     var header_map = {};
     headers.forEach(function(header) {
-      if (header[0] == 'host') {
+      if (header[0] === 'host') {
         return;
       }
       header_map[header[0]] = header[1];
@@ -59,8 +59,8 @@ Chikyu.Sdk.prototype.invoke = function(apiClass, apiPath, apiData, headers, http
       headers: header_map
     }).success(function(data) {
       onSuccess(data);
-    }).error(function(err) {
-      onError(err);
+    }).error(function(data, status, headers, config) {
+      onError(data, status, headers, config);
     });
   }
 
@@ -72,7 +72,7 @@ Chikyu.Sdk.prototype.buildUrl = function(apiClass, apiPath, withHost) {
     withHost = true;
   }
 
-  if (apiPath.indexOf('/') == 0) {
+  if (apiPath.indexOf('/') === 0) {
     apiPath = apiPath.substr(1);
   }
 

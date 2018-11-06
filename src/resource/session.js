@@ -82,8 +82,8 @@ Chikyu.Sdk.prototype.changeOrgan = function(targetOrganId) {
   this.invokeSecure('/session/organ/change', {
     'target_organ_id': targetOrganId
   }).then(function(data) {
-    that.session.apiKey = data['api_key']
-    that.session.user = data['user']
+    that.session.apiKey = data['api_key'];
+    that.session.user = data['user'];
     d.resolve();
   }).fail(function(err) {
     d.reject(err);

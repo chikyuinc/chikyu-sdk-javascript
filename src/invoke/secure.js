@@ -11,7 +11,7 @@ Chikyu.Sdk.prototype.invokeSecure = function(apiPath, data, http) {
     'data': data
   };
 
-  if (this.config.mode() == 'local' || this.config.mode() == 'docker') {
+  if (this.config.mode() === 'local' || this.config.mode() === 'docker') {
     params['identity_id'] = this.session.identityId;
   }
 
