@@ -16,7 +16,7 @@ htmlのヘッダ部に、以下のスクリプトを埋め込んで下さい。
 <script src="https://sdk.amazonaws.com/js/aws-sdk-2.190.0.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/js-sha256/0.9.0/sha256.js"></script>
 <script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
-<script src="https://s3-ap-northeast-1.amazonaws.com/chikyu-cors/js/chikyu-sdk.min.js"></script>
+<script src="https://distribution.chikyu.net/js/chikyu-sdk.min.js"></script>
 ```
 
 ## SDKを利用する
