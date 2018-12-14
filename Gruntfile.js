@@ -15,6 +15,7 @@ module.exports = function(g){
               "./src/invoke/open.js",
               "./src/invoke/public.js",
               "./src/invoke/secure.js",
+              "./src/invoke/signless.js",
               "./src/resource/session.js",
               "./src/resource/token.js"],
         dest: './target/js/chikyu-sdk.js',
