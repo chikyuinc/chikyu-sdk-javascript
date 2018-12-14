@@ -6,7 +6,6 @@ Chikyu.Sdk.prototype.login = function(tokenName, loginToken, secretToken, durati
     token_name: tokenName,
     login_token: loginToken,
     login_secret_token: secretToken,
-
     duration: duration
   }).done(function(data) {
     that.session.sessionId = data.session_id;
@@ -18,6 +17,7 @@ Chikyu.Sdk.prototype.login = function(tokenName, loginToken, secretToken, durati
     // var localTime = new Date().getTime();
     // var serverTime = data.server_time * 1000;
     that.session.offset = 0; //serverTime - localTime;
+    that.session.sessionSecretKey = data.session_secret_key;
 
     var cognitoToken = data.cognito_token;
     that.getCredentials(data.cognito_token).done(function(data) {
@@ -45,6 +45,7 @@ Chikyu.Sdk.prototype.sessionToMap = function() {
   return {
     'sessionId': this.session.sessionId,
     'identityId': this.session.identityId,
+    'sessionSecretKey': this.session.sessionSecretKey,
     'apiKey': this.session.apiKey,
     'offset': this.session.offset,
     'credentials': this.session.credentials,
@@ -58,6 +59,7 @@ Chikyu.Sdk.prototype.mapToSession = function(sessionMap) {
   this.session = {};
   this.session.sessionId = sessionMap['sessionId'];
   this.session.user = sessionMap['user'];
+  this.session.sessionSecretKey = sessionMap['sessionSecretKey'];
   this.session.identityId = sessionMap['identityId'];
   this.session.apiKey = sessionMap['apiKey'];
   this.session.offset = sessionMap['offset'];
@@ -82,8 +84,8 @@ Chikyu.Sdk.prototype.changeOrgan = function(targetOrganId) {
   this.invokeSecure('/session/organ/change', {
     'target_organ_id': targetOrganId
   }).then(function(data) {
-    that.session.apiKey = data['api_key']
-    that.session.user = data['user']
+    that.session.apiKey = data['api_key'];
+    that.session.user = data['user'];
     d.resolve();
   }).fail(function(err) {
     d.reject(err);
