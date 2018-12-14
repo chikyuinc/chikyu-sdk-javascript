@@ -22,6 +22,7 @@ Chikyu.Sdk.prototype.invokeSignless = function(apiPath, data, http) {
   //console.log(authText);
   var authKey = sha256.update(authText).hex();
   var headers = [
+    ['X-API-KEY', this.session.apiKey],
     ['X-AUTH-KEY', authKey],
     ['Content-Type', 'application/json']
   ];
