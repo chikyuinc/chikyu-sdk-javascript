@@ -93,8 +93,7 @@ chikyu.invokePublic('/entity/prospects/list', {
 ```create_token.js
 chikyu = new Chikyu.Sdk();
 
-// 2018/05/15現在、まだ本番環境が存在しないため、接続先の指定が必要。
-chikyu.config.setMode('devdc');
+chikyu.config.setMode('prod');
 
 chikyu = new Chikyu.Sdk();
 chikyu.createToken('token_name', 'email', 'password')
@@ -164,7 +163,5 @@ chikyu.invokeSecure('/entity/prospects/list', {
 
 
 ## APIリスト
-こちらをご覧ください。
-
-http://dev-docs.chikyu.mobi/
+ちきゅう内部にあるチャットツールからCSにお問い合わせください。
 
