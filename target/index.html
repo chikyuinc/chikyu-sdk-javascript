@@ -67,21 +67,39 @@
     </script>
   </head>
   <body>
+    <h1>JavaScript-SDK使用サンプルHTML画面</h1>
+    <h2>こちらあくまで参考用です。</h2>
+    <h3>CORSエラーが出ないようにWebサーバー上での動作をお勧め致します。
+    <br/>Token取得後のログイン時など、何かおかしい場合はブラウザのキャッシュが原因である事が多いです。
+    <br/>ブラウザのスーパーリロードなどをして、キャッシュを消して再度試す事をお勧め致します。</h3>
     <div id="token">
-        <input type="text" id="token_name"></br>
-        <input type="text" id="email"><br/>
-        <input type="password" id="password"><br/>
-        <div id="login_token_1"></div>
+        <p>Token取得用フォームです</p>
+        token_name:<input type="text" id="token_name"></br>
+        email:<input type="text" id="email"><br/>
+        password:<input type="password" id="password"><br/>
+        <div id="login_token_1"></div><br/>
         <div id="login_token_2"></div>
         <button id="btn_token_test">token_test</button>
     </div>
     <div id="login">
-      <button id="btn_login_test">login_test</button><br/>
-      <button id="btn_count_prospects">count_test</button><br/>
-      <div id="item_total_count"></div>
-      <button id="btn_session_to_map">to_map</button><br/>
+      <p>上記で、ログイントークン(1行目)とログインシークレットトークン(2行目)が取得できたら、</p>
+      <p>config.json.sampleからconfig.prod.jsonを作成して、以下のように設定します。</p>
+      <p>
+        "token": {
+          "token_name": "トークン取得できたらその時と同じtoken_nameをここに入れてください。",
+          "login_token": "トーク取得で取得できた１行目のログイントークンをここに入れてください。",
+          "login_secret_token": "トーク取得で取得できた２行目のログインシークレットトークンをここに入れてください。"
+        }
+      </p>
+      <p>設定ができたら、以下のボタンで、ログインができるか確認します。</p>
+      <button id="btn_login_test">login_test</button><br/><br/>
+      <p>ログインができたら、以下のボタンで、entity/prospects/listのAPIが叩けるかが確認できます。</p>
+      <button id="btn_count_prospects">count_test</button><br/><br/>
+      <div id="item_total_count"></div><br/>
+      <p>上記までが出来たら、このSDKでのAPIが利用できる事が確認できている状態です。</p>
+      <!--<button id="btn_session_to_map">to_map</button><br/>
       <div id="session_item"></div>
-      <button id="btn_session_from_map">from_map</button><br/>
+      <button id="btn_session_from_map">from_map</button><br/>-->
     </div>
   </body>
 </html>
