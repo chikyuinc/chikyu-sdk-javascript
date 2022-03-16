@@ -21,14 +21,14 @@ Chikyu.Sdk.prototype.config = {
       'docker': 'dev-python:9090',
       'prod': 'endpoint.chikyu.net'
     }
-    return hosts[this.mode()] || 'gateway.chikyu.mobi';
+    return this.mode() in hosts ? hosts[this.mode()] : 'gateway.chikyu.mobi';
   },
   protocol: function() {
     var protocols = {
       'local': 'http',
       'docker': 'http'
     }
-    return protocols[this.mode()] || 'https';
+    return this.mode() in protocols ? protocols[this.mode()] : 'https';
   },
   envName: function() {
     var envNames = {
@@ -37,7 +37,7 @@ Chikyu.Sdk.prototype.config = {
       'devdc': 'dev',
       'prod': ''
     }
-    return envNames[this.mode()] || this.mode();
+    return this.mode() in envNames ? envNames[this.mode()] : this.mode();
   },
   mode: function() {
     if (!this._mode) {
