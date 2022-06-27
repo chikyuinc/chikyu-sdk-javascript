@@ -19,37 +19,25 @@ Chikyu.Sdk.prototype.config = {
     var hosts = {
       'local': 'localhost:9090',
       'docker': 'dev-python:9090',
-      'devdc': 'gateway.chikyu.mobi',
-      'dev01': 'gateway.chikyu.mobi',
-      'dev02': 'gateway.chikyu.mobi',
-      'hotfix01': 'gateway.chikyu.mobi',
       'prod': 'endpoint.chikyu.net'
     }
-    return hosts[this.mode()];
+    return this.mode() in hosts ? hosts[this.mode()] : 'gateway.chikyu.mobi';
   },
   protocol: function() {
     var protocols = {
       'local': 'http',
-      'docker': 'http',
-      'devdc': 'https',
-      'dev01': 'https',
-      'dev02': 'https',
-      'hotfix01': 'https',
-      'prod': 'https'
+      'docker': 'http'
     }
-    return protocols[this.mode()];
+    return this.mode() in protocols ? protocols[this.mode()] : 'https';
   },
   envName: function() {
     var envNames = {
       'local': '',
       'docker': '',
       'devdc': 'dev',
-      'dev01': 'dev01',
-      'dev02': 'dev02',
-      'hotfix01': 'hotfix01',
       'prod': ''
     }
-    return envNames[this.mode()];
+    return this.mode() in envNames ? envNames[this.mode()] : this.mode();
   },
   mode: function() {
     if (!this._mode) {
