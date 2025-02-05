@@ -1,6 +1,6 @@
 # chikyu-sdk-javascript
 ## 概要
-ちきゅうのWeb APIをJavaScript(jQuery)から利用するためのライブラリです。
+GENIEE SFA/CRM(旧ちきゅう)のWeb APIをJavaScript(jQuery)から利用するためのライブラリです。
 
 ＊NodeJSでの利用は想定しておりません。
 
@@ -163,5 +163,5 @@ chikyu.invokeSecure('/entity/prospects/list', {
 
 
 ## APIリスト
-ちきゅう内部にあるチャットツールからCSにお問い合わせください。
+GENIEE SFA/CRM(旧ちきゅう)内部にあるチャットツールからCSにお問い合わせください。
 
