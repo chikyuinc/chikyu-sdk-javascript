@@ -7,12 +7,20 @@ Chikyu.Sdk.prototype.invoke = function(apiClass, apiPath, apiData, headers, http
   var d = $.Deferred();
 
   var onSuccess = function(data) {
+    // 既存API形式: { has_error: true/false, data: ... }
     if (data.has_error) {
       console.log('AJAX Error: ' + data.message);
       d.reject(data);
       return;
     }
-    d.resolve(data.data);
+    // 新SFA API形式: { success: true/false, payload: ..., error_list: ... }
+    if (data.success === false) {
+      console.log('AJAX Error: ', data.error_list);
+      d.reject(data);
+      return;
+    }
+    // 新API形式ならpayload、既存形式ならdata
+    d.resolve(data.payload !== undefined ? data.payload : data.data);
   };
 
   var onError = function(data, status, headers, config) {
