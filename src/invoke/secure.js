@@ -1,8 +1,6 @@
 Chikyu.Sdk.prototype.invokeSecure = function(apiPath, data, http) {
   if (!this.hasSession()) {
-    var d = $.Deferred();
-    d.reject({'has_error': true, 'message': 'セッション情報がありません'});
-    return d.promise();
+    return Promise.reject({'has_error': true, 'message': 'セッション情報がありません'});
   }
 
   var path = this.buildUrl("secure", apiPath, false);
