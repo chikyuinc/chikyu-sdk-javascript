@@ -1,6 +1,9 @@
-Chikyu.Sdk.prototype.invoke = function(apiClass, apiPath, apiData, headers, http) {
+Chikyu.Sdk.prototype.invoke = function(apiClass, apiPath, apiData, headers, http, method) {
   if (!headers) {
     headers = [['Content-Type', 'application/json']];
+  }
+  if (!method) {
+    method = 'POST';
   }
 
   var url = this.buildUrl(apiClass, apiPath);
@@ -28,12 +31,18 @@ Chikyu.Sdk.prototype.invoke = function(apiClass, apiPath, apiData, headers, http
       }
     });
 
-    return fetch(url, {
-      method: 'POST',
+    var fetchOptions = {
+      method: method,
       headers: headerObj,
-      body: JSON.stringify(apiData),
       cache: 'no-cache'
-    })
+    };
+
+    // GET/DELETEの場合はbodyを含めない（DELETEはbodyを含める場合もある）
+    if (method !== 'GET' && apiData !== null && apiData !== undefined) {
+      fetchOptions.body = JSON.stringify(apiData);
+    }
+
+    return fetch(url, fetchOptions)
     .then(function(response) {
       return response.json();
     })
@@ -48,12 +57,17 @@ Chikyu.Sdk.prototype.invoke = function(apiClass, apiPath, apiData, headers, http
         }
       });
 
-      http({
+      var httpOptions = {
         url: url,
-        method: 'POST',
-        data: apiData,
+        method: method,
         headers: header_map
-      }).success(function(data) {
+      };
+
+      if (method !== 'GET' && apiData !== null && apiData !== undefined) {
+        httpOptions.data = apiData;
+      }
+
+      http(httpOptions).success(function(data) {
         try {
           var result = processResponse(data);
           if (result instanceof Promise) {
