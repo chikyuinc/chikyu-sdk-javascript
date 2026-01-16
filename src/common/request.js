@@ -50,17 +50,17 @@ Chikyu.Sdk.prototype.invoke = function(apiClass, apiPath, apiData, headers, http
   } else {
     // AngularJSのhttpオブジェクトを想定。
     return new Promise(function(resolve, reject) {
-      var header_map = {};
+      var headerObjForAngularJs = {};
       headers.forEach(function(header) {
         if (header[0] !== 'host') {
-          header_map[header[0]] = header[1];
+          headerObjForAngularJs[header[0]] = header[1];
         }
       });
 
       var httpOptions = {
         url: url,
         method: method,
-        headers: header_map
+        headers: headerObjForAngularJs
       };
 
       if (method !== 'GET' && apiData !== null && apiData !== undefined) {
