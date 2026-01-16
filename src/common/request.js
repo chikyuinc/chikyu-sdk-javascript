@@ -9,6 +9,11 @@ Chikyu.Sdk.prototype.invoke = function(apiClass, apiPath, apiData, headers, http
   var url = this.buildUrl(apiClass, apiPath);
 
   var processResponse = function(data) {
+    // dataがnull/undefinedの場合のエラーハンドリング
+    if (!data) {
+      console.log('AJAX Error: Empty response');
+      return Promise.reject({ message: 'Empty response', data: null });
+    }
     // 既存API形式: { has_error: true/false, data: ... }
     if (data.has_error) {
       console.log('AJAX Error: ' + data.message);
