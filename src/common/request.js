@@ -31,7 +31,8 @@ Chikyu.Sdk.prototype.invoke = function(apiClass, apiPath, apiData, headers, http
   if (!http) {
     var headerObj = {};
     headers.forEach(function(header) {
-      if (header[0] !== 'host') {
+      // HTTPヘッダは大文字小文字を区別しないため、正規化して比較
+      if (header[0].toLowerCase() !== 'host') {
         headerObj[header[0]] = header[1];
       }
     });
@@ -78,7 +79,8 @@ Chikyu.Sdk.prototype.invoke = function(apiClass, apiPath, apiData, headers, http
     return new Promise(function(resolve, reject) {
       var headerObjForAngularJs = {};
       headers.forEach(function(header) {
-        if (header[0] !== 'host') {
+        // HTTPヘッダは大文字小文字を区別しないため、正規化して比較
+        if (header[0].toLowerCase() !== 'host') {
           headerObjForAngularJs[header[0]] = header[1];
         }
       });
