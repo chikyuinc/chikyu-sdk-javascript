@@ -44,6 +44,16 @@ Chikyu.Sdk.prototype.invoke = function(apiClass, apiPath, apiData, headers, http
 
     return fetch(url, fetchOptions)
     .then(function(response) {
+      if (!response.ok) {
+        // 400番台・500番台のHTTPエラー
+        return response.json().catch(function() {
+          // JSONパースに失敗した場合
+          return { message: response.statusText };
+        }).then(function(data) {
+          data.http_status = response.status;
+          return Promise.reject(data);
+        });
+      }
       return response.json();
     })
     .then(processResponse);
