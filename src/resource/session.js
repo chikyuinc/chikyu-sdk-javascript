@@ -10,6 +10,7 @@ Chikyu.Sdk.prototype.login = function(tokenName, loginToken, secretToken, durati
   }).then(function(data) {
     that.session.sessionId = data.session_id;
     that.session.identityId = data.cognito_identity_id;
+    that.session.identityPoolId = that.config.cognitoIdentityPoolId();
     that.session.apiKey = data.api_key;
     that.session.user = {};
     that.session.user.userId = data.user.user_id;

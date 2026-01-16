@@ -23,8 +23,15 @@ Chikyu.Sdk.prototype.invoke = function(apiClass, apiPath, apiData, headers, http
       console.log('AJAX Error: ', data.error_list);
       return Promise.reject(data);
     }
-    // 新API形式ならpayload、既存形式ならdata
-    return data.payload !== undefined ? data.payload : data.data;
+    // 新API形式ならpayload、既存形式ならdata、どちらでもなければそのまま返す
+    if (data.payload !== undefined) {
+      return data.payload;
+    }
+    if (data.data !== undefined) {
+      return data.data;
+    }
+    // ラッパーなしのレスポンス（api_key, auth_keyなどが直接含まれる場合）
+    return data;
   };
 
   if (!http) {
