@@ -42,7 +42,7 @@ Chikyu.Sdk.prototype.invoke = function(apiClass, apiPath, apiData, headers, http
       cache: 'no-cache'
     };
 
-    // GET/DELETEの場合はbodyを含めない（DELETEはbodyを含める場合もある）
+    // GETの場合はbodyを含めない、それ以外（POST/PUT/DELETE等）はデータがあればbodyを含める
     if (method !== 'GET' && apiData !== null && apiData !== undefined) {
       fetchOptions.body = JSON.stringify(apiData);
     }
@@ -59,7 +59,18 @@ Chikyu.Sdk.prototype.invoke = function(apiClass, apiPath, apiData, headers, http
           return Promise.reject(data);
         });
       }
-      return response.json();
+      // 204 No Content や空ボディの場合はnullを返す
+      return response.text().then(function(text) {
+        if (!text) {
+          return null;
+        }
+        try {
+          return JSON.parse(text);
+        } catch (e) {
+          // JSONパースに失敗した場合は生テキストをエラーとして返す
+          return Promise.reject({ message: 'Invalid JSON response', raw: text });
+        }
+      });
     })
     .then(processResponse);
   } else {
