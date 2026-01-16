@@ -122,13 +122,14 @@ Chikyu.Sdk.prototype.sfaLogin = function(tokenName, loginToken, secretToken, dur
  */
 Chikyu.Sdk.prototype.sfaCreateTokenAndLogin = function(tokenName, email, password, duration) {
   var that = this;
+  var effectiveDuration = duration || 0;
   
   return this.invokeSfaOpen('SessionToken.create', {
     token_name: tokenName,
     email: email,
     password: password,
-    duration: duration || 0
+    duration: effectiveDuration
   }).then(function(tokenData) {
-    return that.sfaLogin(tokenName, tokenData.login_token, tokenData.login_secret_token, duration);
+    return that.sfaLogin(tokenName, tokenData.login_token, tokenData.login_secret_token, effectiveDuration);
   });
 };
