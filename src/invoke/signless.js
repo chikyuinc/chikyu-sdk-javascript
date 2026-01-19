@@ -1,8 +1,6 @@
 Chikyu.Sdk.prototype.invokeSignless = function(apiPath, data, http) {
   if (!this.hasSession()) {
-    var d = $.Deferred();
-    d.reject({'has_error': true, 'message': 'セッション情報がありません'});
-    return d.promise();
+    return Promise.reject({'has_error': true, 'message': 'セッション情報がありません'});
   }
 
   var d = new Date();
@@ -19,7 +17,6 @@ Chikyu.Sdk.prototype.invokeSignless = function(apiPath, data, http) {
   };
 
   var authText = salt + '&' + JSON.stringify(params) + '&' + this.session.sessionSecretKey;
-  //console.log(authText);
   var authKey = sha256.update(authText).hex();
   var headers = [
     ['X-API-KEY', this.session.apiKey],

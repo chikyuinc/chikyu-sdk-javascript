@@ -1,70 +1,126 @@
-Chikyu.Sdk.prototype.invoke = function(apiClass, apiPath, apiData, headers, http) {
+Chikyu.Sdk.prototype.invoke = function(apiClass, apiPath, apiData, headers, http, method) {
   if (!headers) {
-    headers = [['Content-Type', 'application/json']]
+    headers = [['Content-Type', 'application/json']];
+  }
+  if (!method) {
+    method = 'POST';
   }
 
   var url = this.buildUrl(apiClass, apiPath);
-  var d = $.Deferred();
 
-  var onSuccess = function(data) {
+  var processResponse = function(data) {
+    // 204 No Content や空ボディの場合はnullをそのまま返す（成功扱い）
+    if (data === null || data === undefined) {
+      return null;
+    }
+    // 既存API形式: { has_error: true/false, data: ... }
     if (data.has_error) {
       console.log('AJAX Error: ' + data.message);
-      d.reject(data);
-      return;
+      return Promise.reject(data);
     }
-    d.resolve(data.data);
-  };
-
-  var onError = function(data, status, headers, config) {
-    d.reject(data, status, headers, config);
+    // 新SFA API形式: { success: true/false, payload: ..., error_list: ... }
+    if (data.success === false) {
+      console.log('AJAX Error: ', data.error_list);
+      return Promise.reject(data);
+    }
+    // 新API形式ならpayload、既存形式ならdata、どちらでもなければそのまま返す
+    if (data.payload !== undefined) {
+      return data.payload;
+    }
+    if (data.data !== undefined) {
+      return data.data;
+    }
+    // ラッパーなしのレスポンス（api_key, auth_keyなどが直接含まれる場合）
+    return data;
   };
 
   if (!http) {
-    var payload = JSON.stringify(apiData);
-    $.ajax({
-        url: url,
-        type: 'POST',
-        dataType: 'json',
-        processData: false,
-        crossDomain: true,
-        data: payload,
-        cache: false,
-        beforeSend: function(xhr) {
-          headers.forEach(function(header) {
-            if (header[0] === 'host') {
-              return;
-            }
-            xhr.setRequestHeader(header[0], header[1]);
-          });
-        }
-    }).done(function(data) {
-      onSuccess(data);
-    }).fail(function(req, status, error) {
-      onError(req, status, error, null);
-    });
-  } else {
-    //AngularJSのhttpオブジェクトを想定。
-    var header_map = {};
+    var headerObj = {};
     headers.forEach(function(header) {
-      if (header[0] === 'host') {
-        return;
+      // HTTPヘッダは大文字小文字を区別しないため、正規化して比較
+      if (header[0].toLowerCase() !== 'host') {
+        headerObj[header[0]] = header[1];
       }
-      header_map[header[0]] = header[1];
     });
 
-    http({
-      url: url,
-      method: 'POST',
-      data: apiData,
-      headers: header_map
-    }).success(function(data) {
-      onSuccess(data);
-    }).error(function(data, status, headers, config) {
-      onError(data, status, headers, config);
+    var fetchOptions = {
+      method: method,
+      headers: headerObj,
+      cache: 'no-cache'
+    };
+
+    // GETの場合はbodyを含めない、それ以外（POST/PUT/DELETE等）はデータがあればbodyを含める
+    if (method !== 'GET' && apiData !== null && apiData !== undefined) {
+      fetchOptions.body = JSON.stringify(apiData);
+    }
+
+    return fetch(url, fetchOptions)
+    .then(function(response) {
+      if (!response.ok) {
+        // 400番台・500番台のHTTPエラー
+        return response.json().catch(function() {
+          // JSONパースに失敗した場合
+          return { message: response.statusText };
+        }).then(function(data) {
+          // dataがnullまたは非オブジェクトの場合のガード処理
+          if (data === null || typeof data !== 'object') {
+            data = { message: response.statusText };
+          }
+          data.http_status = response.status;
+          return Promise.reject(data);
+        });
+      }
+      // 204 No Content や空ボディの場合はnullを返す
+      return response.text().then(function(text) {
+        if (!text) {
+          return null;
+        }
+        try {
+          return JSON.parse(text);
+        } catch (e) {
+          // JSONパースに失敗した場合は生テキストをエラーとして返す
+          return Promise.reject({ message: 'Invalid JSON response', raw: text });
+        }
+      });
+    })
+    .then(processResponse);
+  } else {
+    // AngularJSのhttpオブジェクトを想定。
+    return new Promise(function(resolve, reject) {
+      var headerObjForAngularJs = {};
+      headers.forEach(function(header) {
+        // HTTPヘッダは大文字小文字を区別しないため、正規化して比較
+        if (header[0].toLowerCase() !== 'host') {
+          headerObjForAngularJs[header[0]] = header[1];
+        }
+      });
+
+      var httpOptions = {
+        url: url,
+        method: method,
+        headers: headerObjForAngularJs
+      };
+
+      if (method !== 'GET' && apiData !== null && apiData !== undefined) {
+        httpOptions.data = apiData;
+      }
+
+      http(httpOptions).success(function(data) {
+        try {
+          var result = processResponse(data);
+          if (result instanceof Promise) {
+            result.then(resolve).catch(reject);
+          } else {
+            resolve(result);
+          }
+        } catch (e) {
+          reject(e);
+        }
+      }).error(function(data, status, headers, config) {
+        reject(data);
+      });
     });
   }
-
-  return d.promise();
 };
 
 Chikyu.Sdk.prototype.buildUrl = function(apiClass, apiPath, withHost) {
@@ -77,10 +133,11 @@ Chikyu.Sdk.prototype.buildUrl = function(apiClass, apiPath, withHost) {
   }
 
   var envName = this.config.envName();
+  var path;
   if (envName) {
-    var path = '/' + this.config.envName() + '/api/v2/' + apiClass + '/' + apiPath;
+    path = '/' + this.config.envName() + '/api/v2/' + apiClass + '/' + apiPath;
   } else {
-    var path = '/api/v2/' + apiClass + '/' + apiPath;
+    path = '/api/v2/' + apiClass + '/' + apiPath;
   }
 
   if (withHost) {
@@ -88,4 +145,4 @@ Chikyu.Sdk.prototype.buildUrl = function(apiClass, apiPath, withHost) {
   } else {
     return path;
   }
-}
+};
