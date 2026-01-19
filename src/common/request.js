@@ -62,6 +62,10 @@ Chikyu.Sdk.prototype.invoke = function(apiClass, apiPath, apiData, headers, http
           // JSONパースに失敗した場合
           return { message: response.statusText };
         }).then(function(data) {
+          // dataがnullまたは非オブジェクトの場合のガード処理
+          if (data === null || typeof data !== 'object') {
+            data = { message: response.statusText };
+          }
           data.http_status = response.status;
           return Promise.reject(data);
         });
