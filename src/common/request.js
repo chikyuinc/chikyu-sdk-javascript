@@ -2,17 +2,26 @@ Chikyu.Sdk.prototype.invoke = function(apiClass, apiPath, apiData, headers, http
   if (!headers) {
     headers = [['Content-Type', 'application/json']]
   }
+  headers = headers.slice();
+  if (this.config.useHttpStatus()) {
+    var hasErrorHeader = headers.some(function(h) {
+      return h[0].toLowerCase() === 'error-response';
+    });
+    if (!hasErrorHeader) {
+      headers.push(['Error-Response', 'http-status']);
+    }
+  }
 
   var url = this.buildUrl(apiClass, apiPath);
   var d = $.Deferred();
 
-  var onSuccess = function(data) {
+  var onSuccess = function(data, httpStatus) {
     if (data.has_error) {
       console.log('AJAX Error: ' + data.message);
-      d.reject(data);
+      d.reject(data, httpStatus);
       return;
     }
-    d.resolve(data.data);
+    d.resolve(data.data, httpStatus);
   };
 
   var onError = function(data, status, headers, config) {
@@ -37,10 +46,17 @@ Chikyu.Sdk.prototype.invoke = function(apiClass, apiPath, apiData, headers, http
             xhr.setRequestHeader(header[0], header[1]);
           });
         }
-    }).done(function(data) {
-      onSuccess(data);
+    }).done(function(data, textStatus, jqXHR) {
+      onSuccess(data, jqXHR.status);
     }).fail(function(req, status, error) {
-      onError(req, status, error, null);
+      // responseJSONがある場合はそれを使用
+      if (req.responseJSON) {
+        d.reject(req.responseJSON, req.status);
+        return;
+      }
+      // responseJSONがない場合もエラーオブジェクトを作成
+      var errorData = { has_error: true, message: error || status };
+      d.reject(errorData, req.status);
     });
   } else {
     //AngularJSのhttpオブジェクトを想定。
@@ -57,10 +73,17 @@ Chikyu.Sdk.prototype.invoke = function(apiClass, apiPath, apiData, headers, http
       method: 'POST',
       data: apiData,
       headers: header_map
-    }).success(function(data) {
-      onSuccess(data);
+    }).success(function(data, status) {
+      onSuccess(data, status);
     }).error(function(data, status, headers, config) {
-      onError(data, status, headers, config);
+      // HTTPエラーの場合
+      if (data && typeof data === 'object') {
+        d.reject(data, status);
+        return;
+      }
+      // dataがない場合もエラーオブジェクトを作成
+      var errorData = { has_error: true, message: data || 'Error' };
+      d.reject(errorData, status);
     });
   }
 

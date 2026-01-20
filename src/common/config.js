@@ -47,5 +47,11 @@ Chikyu.Sdk.prototype.config = {
   },
   setMode: function(mode) {
     this._mode = mode;
+  },
+  useHttpStatus: function() {
+    return this._useHttpStatus || false;
+  },
+  setUseHttpStatus: function(flag) {
+    this._useHttpStatus = flag;
   }
 }

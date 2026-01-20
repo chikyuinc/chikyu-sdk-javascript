@@ -161,6 +161,42 @@ chikyu.invokeSecure('/entity/prospects/list', {
 });
 ```
 
+### RESTful応答モード（エラー時のHTTPステータスコード返却）
+デフォルトでは、APIエラー（`has_error: true`）でもHTTPステータスは200を返します。
+`setUseHttpStatus(true)`を設定すると、`has_error: true`の場合にHTTPステータス400が返却されるようになります。
+
+```http_status.js
+chikyu = new Chikyu.Sdk();
+
+// RESTful応答モードを有効化（has_errorに合わせてHTTPステータスを変更）
+chikyu.config.setUseHttpStatus(true);
+
+chikyu.login('token_name', 'login_token', 'login_secret_token').then(function(session) {
+  chikyu.invokeSecure('/entity/prospects/list', {
+    'items_per_page': 10,
+    'page_index': 0
+  }).then(function(data, httpStatus) {
+    // 第2引数でHTTPステータスコードを取得可能
+    console.log('HTTP Status:', httpStatus); // 200
+    alert(JSON.stringify(data));
+  }).fail(function(err, httpStatus) {
+    // エラー時（has_error: true）、HTTPステータス400が返る
+    console.log('Error HTTP Status:', httpStatus); // 400
+    alert(JSON.stringify(err));
+  });
+}).fail(function(err, httpStatus) {
+  alert(JSON.stringify(err));
+});
+```
+
+| 設定 | エラー時のHTTPステータス |
+|------|------------------------|
+| `setUseHttpStatus(false)`（デフォルト） | 常に200 |
+| `setUseHttpStatus(true)` | `has_error: true`の場合は400 |
+
+＊`setUseHttpStatus(true)`を設定すると、リクエストに`Error-Response: http-status`ヘッダーが自動付与されます。
+＊HTTPステータスコード自体は第2引数で常に取得可能です。この設定はサーバー側の返却値を変更します。
+
 
 ## APIリスト
 GENIEE SFA/CRM(旧ちきゅう)内部にあるチャットツールからCSにお問い合わせください。
