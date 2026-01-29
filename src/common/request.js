@@ -42,7 +42,7 @@ Chikyu.Sdk.prototype.invoke = function(apiClass, apiPath, apiData, headers, http
             xhr.setRequestHeader(header[0], header[1]);
           });
         }
-    }).done(function(data, textStatus, jqXHR) {
+    }).done(function(data, _, jqXHR) {
       onSuccess(data, jqXHR.status);
     }).fail(function(req, status, error) {
       // responseJSONがある場合はそれを使用
