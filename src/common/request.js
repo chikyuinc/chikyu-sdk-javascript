@@ -24,10 +24,6 @@ Chikyu.Sdk.prototype.invoke = function(apiClass, apiPath, apiData, headers, http
     d.resolve(data.data, httpStatus);
   };
 
-  var onError = function(data, status, headers, config) {
-    d.reject(data, status, headers, config);
-  };
-
   if (!http) {
     var payload = JSON.stringify(apiData);
     $.ajax({
