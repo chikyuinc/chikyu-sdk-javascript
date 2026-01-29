@@ -71,7 +71,7 @@ Chikyu.Sdk.prototype.invoke = function(apiClass, apiPath, apiData, headers, http
       headers: header_map
     }).success(function(data, status) {
       onSuccess(data, status);
-    }).error(function(data, status, headers, config) {
+    }).error(function(data, status) {
       // HTTPエラーの場合
       if (data && typeof data === 'object') {
         d.reject(data, status);
